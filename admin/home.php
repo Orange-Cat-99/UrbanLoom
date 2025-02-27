@@ -758,397 +758,411 @@ function buildQueryString($params = []) {
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2><?php echo $edit_game ? 'Edit Game' : 'Add New Game'; ?></h2>
-        
-        <div class="form-container">
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>">
-                <?php if ($edit_game) { ?>
-                    <input type="hidden" name="update_id" value="<?php echo $edit_game['game_id']; ?>">
-                <?php } ?>
-                
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="text" name="title" class="form-control" placeholder="Title" 
-                               value="<?php echo $edit_game ? $edit_game['title'] : ''; ?>" required>
-                    </div>
-                    <div class="col">
-                        <select name="genre" class="form-control" required>
-                            <option value="">Select Genre</option>
-                            <?php
-                            $genres = ['Action Games', 'Action-Adventure Games', 'Adventure Games', 'Casual Games'];
-                            foreach ($genres as $genre) {
-                                $selected = ($edit_game && $edit_game['genre'] == $genre) ? 'selected' : '';
-                                echo "<option value='$genre' $selected>$genre</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+<div class="container">
+    <h2><?php echo $edit_game ? 'Edit Game' : 'Why Admins are cool'; ?></h2>
+    
+    <!-- 1. To-Do List Section -->
+    <div class="card-container" style="margin-bottom: 30px;">
+        <div class="card-header">
+            <h3>Game Store To-Do List</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" class="todo-add-form">
+                <input type="text" name="todo_task" class="form-control" placeholder="Add new task..." required>
+                <div class="todo-form-controls">
+                    <select name="todo_priority" class="form-control" required>
+                        <option value="high">High Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                    <input type="date" name="todo_due_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
+                    <button type="submit" class="btn btn-primary">Add</button>
                 </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="text" name="platform" class="form-control" placeholder="Platform" 
-                               value="<?php echo $edit_game ? $edit_game['platform'] : ''; ?>" required>
-                    </div>
-                    <div class="col">
-                        <input type="number" name="price" class="form-control" placeholder="Price" step="0.01" 
-                               value="<?php echo $edit_game ? $edit_game['price'] : ''; ?>" required>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="number" name="stock" class="form-control" placeholder="Stock" 
-                               value="<?php echo $edit_game ? $edit_game['stock'] : ''; ?>" required>
-                    </div>
-                    <div class="col">
-                        <input type="date" name="release_date" class="form-control" 
-                               value="<?php echo $edit_game ? $edit_game['release_date'] : ''; ?>" required>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <textarea name="description" class="form-control" placeholder="Description" rows="3"><?php echo $edit_game ? $edit_game['description'] : ''; ?></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <input type="url" name="image_url" class="form-control" placeholder="Image URL" 
-                           value="<?php echo $edit_game ? $edit_game['image_url'] : ''; ?>">
-                </div>
-
-                <button type="submit" class="btn btn-primary"><?php echo $edit_game ? 'Update Game' : 'Add Game'; ?></button>
-                <?php if ($edit_game) { ?>
-                    <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" class="btn btn-secondary">Cancel</a>
-                <?php } ?>
             </form>
-        </div>
 
-        <!-- Stats Section -->
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-icon games-icon">
-                    <i class="fas fa-gamepad"></i>
-                </div>
-                <div class="stat-info">
-                    <h2 class="stat-number"><?php echo $total_games; ?></h2>
-                    <p class="stat-label">Total Games</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon users-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-info">
-                    <h2 class="stat-number"><?php echo $total_users; ?></h2>
-                    <p class="stat-label">Registered Users</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon active-users-icon">
-                    <i class="fas fa-user-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <h2 class="stat-number"><?php echo end($active_users_data)['count']; ?></h2>
-                    <p class="stat-label">Active Users Today</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon todo-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="stat-info">
-                    <h2 class="stat-number"><?php 
-                        $pending_count = $conn->query("SELECT COUNT(*) as count FROM todos WHERE status='pending'")->fetch_assoc()['count'] ?? 0;
-                        echo $pending_count;
-                    ?></h2>
-                    <p class="stat-label">Pending Tasks</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Users Graph -->
-        <div class="dashboard-grid">
-            <div class="card-container dashboard-full-width">
-                <div class="card-header">
-                    <h3>Active Users - Last 7 Days</h3>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <canvas id="activeUsersChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
-            <!-- Games Section -->
-            <div class="card-container">
-                <div class="card-header">
-                    <h3>Games List</h3>
-                    <?php if (!$show_games_all) { ?>
-                        <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_games_all' => true]); ?>" class="view-all-btn">
-                            View All <i class="fas fa-arrow-right"></i>
-                        </a>
-                    <?php } else { ?>
-                        <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_games_all' => false]); ?>" class="view-all-btn">
-                            Show Less <i class="fas fa-arrow-up"></i>
-                        </a>
-                    <?php } ?>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Platform</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($games_result->num_rows > 0) {
-                                    while ($row = $games_result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td data-label='ID'>" . $row['game_id'] . "</td>";
-                                        echo "<td data-label='Title'>" . $row['title'] . "</td>";
-                                        echo "<td data-label='Platform'>" . $row['platform'] . "</td>";
-                                        echo "<td data-label='Price'>$" . number_format($row['price'], 2) . "</td>";
-                                        echo "<td data-label='Stock'>" . $row['stock'] . "</td>";
-                                        echo "<td class='action-column'>";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?edit=" . $row['game_id'] . buildQueryString() . "' class='btn btn-warning btn-sm action-btn'>Edit</a>";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?delete=" . $row['game_id'] . buildQueryString() . "' class='btn btn-danger btn-sm action-btn' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
-                                        echo "</td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='6'>No games found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Users Section -->
-            <div class="card-container">
-                <div class="card-header">
-                    <h3>Recent Users</h3>
-                    <?php if (!$show_users_all) { ?>
-                        <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_users_all' => true]); ?>" class="view-all-btn">
-                            View All <i class="fas fa-arrow-right"></i>
-                        </a>
-                    <?php } else { ?>
-                        <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_users_all' => false]); ?>" class="view-all-btn">
-                            Show Less <i class="fas fa-arrow-up"></i>
-                        </a>
-                    <?php } ?>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Registered</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($users_result->num_rows > 0) {
-                                    while ($row = $users_result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td data-label='ID'>" . $row['user_id'] . "</td>";
-                                        echo "<td data-label='Username'>" . $row['username'] . "</td>";
-                                        echo "<td data-label='Email'>" . $row['email'] . "</td>";
-                                        echo "<td data-label='Registered'>" . date('M d, Y', strtotime($row['created_at'])) . "</td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='4'>No users found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- To-Do List Section -->
-            <div class="card-container">
-                <div class="card-header">
-                    <h3>Game Store To-Do List</h3>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" class="todo-add-form">
-                        <input type="text" name="todo_task" class="form-control" placeholder="Add new task..." required>
-                        <div class="todo-form-controls">
-                            <select name="todo_priority" class="form-control" required>
-                                <option value="high">High Priority</option>
-                                <option value="medium" selected>Medium Priority</option>
-                                <option value="low">Low Priority</option>
-                            </select>
-                            <input type="date" name="todo_due_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
-                            <button type="submit" class="btn btn-primary">Add</button>
-                        </div>
-                    </form>
-
-                    <ul class="todo-list">
-                        <?php
-                        if ($todos_result->num_rows > 0) {
-                            while ($todo = $todos_result->fetch_assoc()) {
-                                $completed = $todo['status'] === 'completed';
-                                $priorityClass = 'priority-' . $todo['priority'];
-                                $itemClass = $completed ? 'todo-item todo-completed' : 'todo-item';
-                                ?>
-                                <li class="<?php echo $itemClass; ?>">
-                                    <?php if (!$completed) { ?>
-                                        <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" style="display:flex; align-items:center;">
-                                            <input type="hidden" name="todo_complete" value="<?php echo $todo['id']; ?>">
-                                            <button type="submit" class="todo-checkbox" style="background:none; border:none; cursor:pointer;">
-                                                <i class="far fa-square"></i>
-                                            </button>
-                                        </form>
-                                    <?php } else { ?>
-                                        <span class="todo-checkbox">
-                                            <i class="fas fa-check-square text-success"></i>
-                                        </span>
-                                    <?php } ?>
-                                    
-                                    <div class="todo-content">
-                                        <div class="todo-title"><?php echo htmlspecialchars($todo['task']); ?></div>
-                                        <div class="todo-meta">
-                                            <span class="todo-due">
-                                                <i class="far fa-calendar-alt"></i> 
-                                                <?php echo date('M d, Y', strtotime($todo['due_date'])); ?>
-                                            </span>
-                                            <span class="todo-priority <?php echo $priorityClass; ?>">
-                                                <?php echo $todo['priority']; ?>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="todo-actions">
-                                        <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete_todo=' . $todo['id'] . buildQueryString(); ?>" 
-                                           class="todo-action-btn" onclick="return confirm('Delete this task?')">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                                <?php
-                            }
-                        } else {
-                            echo '<li class="todo-item"><div class="todo-content"><div class="todo-title">No tasks found</div></div></li>';
-                        }
+            <ul class="todo-list">
+                <?php
+                if ($todos_result->num_rows > 0) {
+                    while ($todo = $todos_result->fetch_assoc()) {
+                        $completed = $todo['status'] === 'completed';
+                        $priorityClass = 'priority-' . $todo['priority'];
+                        $itemClass = $completed ? 'todo-item todo-completed' : 'todo-item';
                         ?>
-                    </ul>
+                        <li class="<?php echo $itemClass; ?>">
+                            <?php if (!$completed) { ?>
+                                <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" style="display:flex; align-items:center;">
+                                    <input type="hidden" name="todo_complete" value="<?php echo $todo['id']; ?>">
+                                    <button type="submit" class="todo-checkbox" style="background:none; border:none; cursor:pointer;">
+                                        <i class="far fa-square"></i>
+                                    </button>
+                                </form>
+                            <?php } else { ?>
+                                <span class="todo-checkbox">
+                                    <i class="fas fa-check-square text-success"></i>
+                                </span>
+                            <?php } ?>
+                            
+                            <div class="todo-content">
+                                <div class="todo-title"><?php echo htmlspecialchars($todo['task']); ?></div>
+                                <div class="todo-meta">
+                                    <span class="todo-due">
+                                        <i class="far fa-calendar-alt"></i> 
+                                        <?php echo date('M d, Y', strtotime($todo['due_date'])); ?>
+                                    </span>
+                                    <span class="todo-priority <?php echo $priorityClass; ?>">
+                                        <?php echo $todo['priority']; ?>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="todo-actions">
+                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete_todo=' . $todo['id'] . buildQueryString(); ?>" 
+                                   class="todo-action-btn" onclick="return confirm('Delete this task?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <?php
+                    }
+                } else {
+                    echo '<li class="todo-item"><div class="todo-content"><div class="todo-title">No tasks found</div></div></li>';
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height: 30px;"></div>
+
+    <!-- 2. Stats Section -->
+    <div class="stats-container" style="margin-bottom: 30px;">
+        <div class="stat-card">
+            <div class="stat-icon games-icon">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <div class="stat-info">
+                <h2 class="stat-number"><?php echo $total_games; ?></h2>
+                <p class="stat-label">Total Games</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon users-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h2 class="stat-number"><?php echo $total_users; ?></h2>
+                <p class="stat-label">Registered Users</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon active-users-icon">
+                <i class="fas fa-user-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h2 class="stat-number"><?php echo end($active_users_data)['count']; ?></h2>
+                <p class="stat-label">Active Users Today</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon todo-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-info">
+                <h2 class="stat-number"><?php 
+                    $pending_count = $conn->query("SELECT COUNT(*) as count FROM todos WHERE status='pending'")->fetch_assoc()['count'] ?? 0;
+                    echo $pending_count;
+                ?></h2>
+                <p class="stat-label">Pending Tasks</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height: 30px;"></div>
+
+    <!-- 3. Active Users Graph -->
+    <div class="dashboard-grid" style="margin-bottom: 30px;">
+        <div class="card-container dashboard-full-width">
+            <div class="card-header">
+                <h3>Active Users - Last 7 Days</h3>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="activeUsersChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    
-    <script>
-        // Active Users Chart
-        var ctx = document.getElementById('activeUsersChart').getContext('2d');
-        var activeUsersData = <?php echo json_encode($active_users_data); ?>;
-        
-        var labels = activeUsersData.map(function(item) {
-            return item.date;
-        });
-        
-        var data = activeUsersData.map(function(item) {
-            return item.count;
-        });
-        
-        var activeUsersChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Active Users',
-                    data: data,
-                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                    borderColor: 'rgba(78, 115, 223, 1)',
-                    borderWidth: 3,
-                    pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverRadius: 6,
-                    pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
-                    pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 25,
-                        top: 25,
-                        bottom: 0
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false,
-                            drawBorder: false
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: "rgba(0, 0, 0, 0.05)",
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value;
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: "rgb(255, 255, 255)",
-                        bodyColor: "#858796",
-                        titleMarginBottom: 10,
-                        titleColor: '#6e707e',
-                        titleFontSize: 14,
-                        borderColor: '#dddfeb',
-                        borderWidth: 1,
-                        padding: 15,
-                        displayColors: false,
-                        intersect: false,
-                        mode: 'index',
-                        caretPadding: 10,
-                        callbacks: {
-                            label: function(context) {
-                                var label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
+
+    <!-- Spacer -->
+    <div style="height: 30px;"></div>
+
+    <!-- 4. Games List and Recent Users -->
+    <div class="dashboard-grid" style="margin-bottom: 30px;">
+        <!-- Games Section -->
+        <div class="card-container">
+            <div class="card-header">
+                <h3>Games List</h3>
+                <?php if (!$show_games_all) { ?>
+                    <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_games_all' => true]); ?>" class="view-all-btn">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                <?php } else { ?>
+                    <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_games_all' => false]); ?>" class="view-all-btn">
+                        Show Less <i class="fas fa-arrow-up"></i>
+                    </a>
+                <?php } ?>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Platform</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($games_result->num_rows > 0) {
+                                while ($row = $games_result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td data-label='ID'>" . $row['game_id'] . "</td>";
+                                    echo "<td data-label='Title'>" . $row['title'] . "</td>";
+                                    echo "<td data-label='Platform'>" . $row['platform'] . "</td>";
+                                    echo "<td data-label='Price'>$" . number_format($row['price'], 2) . "</td>";
+                                    echo "<td data-label='Stock'>" . $row['stock'] . "</td>";
+                                    echo "<td class='action-column'>";
+                                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?edit=" . $row['game_id'] . buildQueryString() . "' class='btn btn-warning btn-sm action-btn'>Edit</a>";
+                                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?delete=" . $row['game_id'] . buildQueryString() . "' class='btn btn-danger btn-sm action-btn' onclick='return confirm(\"Are you sure?\")'>Delete</a>";
+                                    echo "</td>";
+                                    echo "</tr>";
                                 }
-                                label += context.parsed.y + ' users';
-                                return label;
+                            } else {
+                                echo "<tr><td colspan='6'>No games found</td></tr>";
                             }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div class="card-container">
+            <div class="card-header">
+                <h3>Recent Users</h3>
+                <?php if (!$show_users_all) { ?>
+                    <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_users_all' => true]); ?>" class="view-all-btn">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                <?php } else { ?>
+                    <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(['show_users_all' => false]); ?>" class="view-all-btn">
+                        Show Less <i class="fas fa-arrow-up"></i>
+                    </a>
+                <?php } ?>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($users_result->num_rows > 0) {
+                                while ($row = $users_result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td data-label='ID'>" . $row['user_id'] . "</td>";
+                                    echo "<td data-label='Username'>" . $row['username'] . "</td>";
+                                    echo "<td data-label='Email'>" . $row['email'] . "</td>";
+                                    echo "<td data-label='Registered'>" . date('M d, Y', strtotime($row['created_at'])) . "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4'>No users found</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height: 30px;"></div>
+
+    <!-- 5. Add New Game Form -->
+    <div class="form-container" style="margin-bottom: 30px;">
+        <h3 style="margin-bottom: 20px;"><?php echo $edit_game ? 'Edit Game Details' : 'Add New Game'; ?></h3>
+        <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>">
+            <?php if ($edit_game) { ?>
+                <input type="hidden" name="update_id" value="<?php echo $edit_game['game_id']; ?>">
+            <?php } ?>
+            
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" name="title" class="form-control" placeholder="Title" 
+                           value="<?php echo $edit_game ? $edit_game['title'] : ''; ?>" required>
+                </div>
+                <div class="col">
+                    <select name="genre" class="form-control" required>
+                        <option value="">Select Genre</option>
+                        <?php
+                        $genres = ['Action Games', 'Action-Adventure Games', 'Adventure Games', 'Casual Games'];
+                        foreach ($genres as $genre) {
+                            $selected = ($edit_game && $edit_game['genre'] == $genre) ? 'selected' : '';
+                            echo "<option value='$genre' $selected>$genre</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" name="platform" class="form-control" placeholder="Platform" 
+                           value="<?php echo $edit_game ? $edit_game['platform'] : ''; ?>" required>
+                </div>
+                <div class="col">
+                    <input type="number" name="price" class="form-control" placeholder="Price" step="0.01" 
+                           value="<?php echo $edit_game ? $edit_game['price'] : ''; ?>" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="number" name="stock" class="form-control" placeholder="Stock" 
+                           value="<?php echo $edit_game ? $edit_game['stock'] : ''; ?>" required>
+                </div>
+                <div class="col">
+                    <input type="date" name="release_date" class="form-control" 
+                           value="<?php echo $edit_game ? $edit_game['release_date'] : ''; ?>" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <textarea name="description" class="form-control" placeholder="Description" rows="3"><?php echo $edit_game ? $edit_game['description'] : ''; ?></textarea>
+            </div>
+
+            <div class="mb-3">
+                <input type="url" name="image_url" class="form-control" placeholder="Image URL" 
+                       value="<?php echo $edit_game ? $edit_game['image_url'] : ''; ?>">
+            </div>
+
+            <button type="submit" class="btn btn-primary"><?php echo $edit_game ? 'Update Game' : 'Add Game'; ?></button>
+            <?php if ($edit_game) { ?>
+                <a href="<?php echo $_SERVER['PHP_SELF'] . buildQueryString(); ?>" class="btn btn-secondary">Cancel</a>
+            <?php } ?>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Active Users Chart
+    var ctx = document.getElementById('activeUsersChart').getContext('2d');
+    var activeUsersData = <?php echo json_encode($active_users_data); ?>;
+    
+    var labels = activeUsersData.map(function(item) {
+        return item.date;
+    });
+    
+    var data = activeUsersData.map(function(item) {
+        return item.count;
+    });
+    
+    var activeUsersChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Active Users',
+                data: data,
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 6,
+                pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: "rgba(0, 0, 0, 0.05)",
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value;
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: "rgb(255, 255, 255)",
+                    bodyColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    padding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y + ' users';
+                            return label;
                         }
                     }
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>
