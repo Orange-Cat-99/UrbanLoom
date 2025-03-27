@@ -19,7 +19,7 @@ UrbanLoom is an online video game store that allows users to browse, purchase, a
 ## Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/urbanloom.git
+   git clone https://github.com/Orange-Cat-99/UrbanLoom.git
    ```
 2. Set up a local server using XAMPP or any other PHP server.
 3. Create a MySQL database named `urbanloom` and import the provided SQL file (`urbanloom.sql`).
