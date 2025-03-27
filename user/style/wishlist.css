@@ -1,0 +1,120 @@
+* {
+    cursor: url("https://cur.cursors-4u.net/holidays/hol-4/hol336.cur"), auto !important;
+}
+
+body {
+    background-color: #18191a;
+    color: #e4e6eb;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #242526;
+}
+.navbar .logo img {
+    height: 50px;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+}
+.navbar .menu {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.navbar .menu a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.navbar .menu a:hover {
+    background-color: #32CD32;
+    color: black;
+}
+.wishlist-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.wishlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.wishlist-header h1 {
+    margin: 0;
+    color: #e4e6eb;
+    font-size: 24px;
+}
+.wishlist-search {
+    background-color: #242526;
+    border: 1px solid #3a3b3c;
+    color: #e4e6eb;
+    padding: 8px 15px;
+    border-radius: 5px;
+    width: 300px;
+}
+.wishlist-item {
+    background-color: #242526;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #3a3b3c;
+}
+.wishlist-item-image {
+    width: 292px;
+    height: 136px;
+    object-fit: cover;
+}
+.wishlist-item-details {
+    flex-grow: 1;
+    padding: 15px;
+}
+.wishlist-item-title {
+    color: #e4e6eb;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+}
+.wishlist-item-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.game-tag {
+    background-color: #3a3b3c;
+    color: #e4e6eb;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.wishlist-item-meta {
+    color: #b0b3b8;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.add-to-library-btn, .remove-from-wishlist-btn {
+    background-color: #32CD32;
+    color: #000;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.add-to-library-btn:hover, .remove-from-wishlist-btn:hover {
+    background-color: #2ecc71;
+}

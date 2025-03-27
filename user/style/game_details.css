@@ -1,0 +1,321 @@
+* {
+    cursor: url("https://cur.cursors-4u.net/holidays/hol-4/hol336.cur"), auto !important;
+}
+
+/* Navbar styling */
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem 2rem;
+background-color: #242526; /* Dark Gray */
+}
+
+/* Logo image styling */
+.navbar .logo img {
+height: 50px; /* Adjust the height as needed */
+width: auto; /* Maintain aspect ratio */
+max-width: 150px; /* Prevent it from getting too large */
+object-fit: contain; /* Ensures the image fits properly */
+}
+
+.navbar .menu {
+display: flex;
+gap: 1rem;
+align-items: center;
+}
+
+/* Menu links */
+.navbar .menu a {
+text-decoration: none;
+color: #fff;
+font-size: 1rem;
+padding: 0.5rem;
+border-radius: 5px;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+/* Hover effect on menu links */
+.navbar .menu a:hover {
+background-color: #32CD32; /* Green */
+color: black;
+}
+
+/* Username styling */
+.navbar .username {
+font-size: 1rem;
+color: #fff;
+font-weight: bold;
+margin-left: 10px;
+}
+
+/* SVG icon styling */
+.navbar .menu svg {
+margin-left: 10px;
+fill: #fff;
+cursor: pointer;
+transition: transform 0.3s ease;
+}
+
+.navbar .menu svg:hover {
+transform: scale(1.1);
+}
+
+/* Page Styling */
+body {
+margin: 0;
+padding: 20px;
+background-color: #242526; /* Dark Gray */
+color: #f1f1f1; /* Light Gray Text */
+font-family: Arial, sans-serif;
+line-height: 1.6;
+}
+
+.game-details-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px;
+background-color: #333333; /* Dark Gray Background */
+border-radius: 8px;
+}
+
+.tabs ul {
+display: flex; /* Use flexbox for horizontal alignment */
+justify-content: center; /* Center the tabs horizontally */
+list-style: none; /* Remove default list styling */
+padding: 0; /* Remove padding */
+margin: 0; /* Remove margin */
+background-color: #222; /* Background color of the tabs */
+border-bottom: 2px solid #444; /* Add a bottom border */
+}
+
+.tabs ul li {
+margin: 0; /* Remove margin */
+}
+
+.tabs ul li a {
+display: block;
+padding: 10px 20px; /* Add padding for spacing */
+text-decoration: none; /* Remove underline from links */
+color: #f1f1f1; /* Light text color */
+border-bottom: 2px solid transparent; /* Bottom border for active indicator */
+transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+.tabs ul li a:hover {
+background-color: #444; /* Highlight background on hover */
+color: #32CD32; /* Change text color on hover */
+}
+
+.tabs ul li a.active {
+border-bottom: 2px solid #32CD32; /* Active tab indicator */
+font-weight: bold; /* Bold the active tab */
+}
+
+.content-wrapper {
+display: grid;
+grid-template-columns: 1fr 300px;
+gap: 20px;
+}
+
+.media-section {
+background-color: #333333; /* Dark Gray */
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.main-video {
+width: 100%;
+height: 400px;
+overflow: hidden;
+border-radius: 8px;
+background-color: #444444; /* Darker Gray */
+}
+
+.main-video img {
+width: 100%;
+height: 400px;
+object-fit: cover;
+display: block;
+}
+
+.game-info {
+background-color: #333333; /* Dark Gray */
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.game-title {
+font-size: 24px;
+margin: 0 0 15px 0;
+color: #32CD32; /* Green for title */
+}
+
+.game-meta {
+display: flex;
+gap: 15px;
+margin-bottom: 15px;
+color: #f1f1f1; /* Light Gray */
+font-size: 14px;
+}
+
+.game-description {
+color: #f1f1f1; /* Light Gray */
+margin-bottom: 20px;
+}
+
+.stock-status {
+color: #4CAF50; /* Green Text */
+margin-bottom: 10px;
+font-weight: bold;
+}
+
+.price {
+font-size: 24px;
+font-weight: bold;
+color: #32CD32; /* Green for price */
+margin-bottom: 15px;
+}
+
+.btn-buy,
+.btn-cart,
+.btn-wishlist {
+width: 100%;
+padding: 10px;
+margin-bottom: 8px;
+border: none;
+border-radius: 4px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.btn-buy {
+background-color: #32CD32; /* Green */
+color: white;
+}
+
+.btn-cart {
+background-color: #2196F3; /* Blue */
+color: white;
+}
+
+.btn-wishlist {
+background-color: #444444; /* Darker Gray */
+color: #f1f1f1;
+}
+
+.additional-info {
+margin-top: 15px;
+padding-top: 15px;
+border-top: 1px solid #ddd;
+}
+
+.rewards,
+.refund {
+display: flex;
+justify-content: space-between;
+margin-bottom: 8px;
+color: #f1f1f1; /* Light Gray */
+font-size: 14px;
+}
+
+.system-requirements {
+margin-top: 40px;
+padding: 20px;
+background: #333333; /* Dark Gray */
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sys-req-title {
+font-size: 22px;
+font-weight: bold;
+margin-bottom: 15px;
+color: #32CD32; /* Green for title */
+}
+
+.requirements {
+display: flex;
+gap: 30px;
+}
+
+.requirements div {
+flex: 1;
+background: #444444; /* Darker Gray */
+padding: 15px;
+border-radius: 6px;
+}
+
+.requirements h3 {
+margin-bottom: 10px;
+font-size: 18px;
+color: #32CD32; /* Green */
+}
+
+@media (max-width: 1024px) {
+.content-wrapper {
+grid-template-columns: 1fr;
+}
+}
+
+@media (max-width: 768px) {
+.game-details-container {
+padding: 10px;
+}
+
+.main-video {
+height: 300px;
+}
+
+.main-video img {
+height: 300px;
+}
+
+.requirements {
+flex-direction: column;
+}
+}
+
+
+.reviews-section {
+margin-top: 40px;
+padding: 20px;
+background: #333333; /* Dark Gray */
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reviews-section h2 {
+color: #32CD32; /* Green */
+margin-bottom: 15px;
+}
+
+.review {
+padding: 10px;
+border-bottom: 1px solid #444;
+margin-bottom: 10px;
+}
+
+.review strong {
+color: #f1f1f1;
+}
+
+.review span {
+color: #FFD700; /* Gold for stars */
+margin-left: 10px;
+}
+
+.review p {
+color: #f1f1f1;
+margin: 5px 0;
+}
+
+.review small {
+color: #aaa;
+display: block;
+margin-top: 5px;
+}
